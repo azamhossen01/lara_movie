@@ -20,7 +20,8 @@ class ActorController extends Controller
 
     public function index()
     {
-        //
+        $actors = Actor::all();
+        return view('actor.index',compact('actors'));
     }
 
     /**
@@ -30,7 +31,7 @@ class ActorController extends Controller
      */
     public function create()
     {
-        //
+        return view('actor.create');
     }
 
     /**
@@ -41,7 +42,16 @@ class ActorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $actor = new Actor;
+        $actor->name = $request->name;
+        $actor->description = $request->description;
+        if($request->image){
+            $imageName = time().'.'.request()->image->getClientOriginalExtension();
+            request()->image->move(public_path('images/actors'), $imageName);
+        $actor->image = $imageName;
+        }
+        $actor->save();
+        return redirect()->route('actors.index');
     }
 
     /**
@@ -52,7 +62,7 @@ class ActorController extends Controller
      */
     public function show($id)
     {
-        $actor = Actor::find($id);
+        $actor = Actor::findOrFail($id);
         return view('actor.show',compact('actor'));
     }
 

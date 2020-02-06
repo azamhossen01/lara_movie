@@ -57,7 +57,7 @@ class MovieController extends Controller
         
 
         $movie->save();
-        $movie = Movie::find($movie->id);
+        $movie = Movie::findOrFail($movie->id);
         $movie->actors()->attach($request->actor_id);
 
         return redirect()->route('movies.index');
